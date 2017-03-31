@@ -1,0 +1,30 @@
+{# src/Resources/views/head.html.twig #}
+{% block meta %}
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    {#/////////// Titre de la page /////////////////////////////// #}
+    <title>{% if page_title is defined %} {{ page_title }} | {% endif %}Intranet du Laboratoire GSB</title>
+
+    {#  //////////////// informations générales ///////////////////// #}
+    <meta name="robots" content="noodp,noydir"/>
+    <meta name="description" content="{{ description }}"/>
+    <meta name="copyright" content="Traoré & Manzola. Copyright (c) 2009-2017"/>
+{% endblock %}
+
+{# //////////////// Déclaration des icones pour IOS ////////////////// #}
+<link href="{{ asset('bundles/gsbfrais/images/favicon.ico') }}" rel="icon" type="image/x-icon" />
+
+{#////////////// Chargement des CSS  ////////////////////////////// #}
+{% stylesheets
+        'bundles/gsbfrais/css/bootstrap.css'
+        'bundles/gsbfrais/css/sb-admin.css'
+        'bundles/gsbfrais/css/font-awesome.css'
+        'bundles/gsbfrais/css/dataTables.bootstrap.min.css' 
+%}
+<link rel="stylesheet" href="{{ asset_url }}" type="text/css"  media="screen"  />
+{% endstylesheets %}
+
+
+
+

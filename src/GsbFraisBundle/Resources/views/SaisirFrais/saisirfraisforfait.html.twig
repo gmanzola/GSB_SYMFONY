@@ -1,0 +1,31 @@
+<div class="col-lg-12 col-md-12 text-center">
+    <h2>Renseigner ma fiche de frais du mois {{nummois}}-{{numannee}}
+        <br><br>
+    ELEMENTS HORS FORFAITISES</h2>
+    <br>
+    <form action="{{path('gsb_frais_saisirfrais')}}" method="POST">
+        <div class="">
+            <fieldset>
+                <legend>Votre véhicule est un(e) {{ puissanceVisiteur.typevehicule }} - {{ puissanceVisiteur.puissance }} TARIF {{ puissanceVisiteur.montant }}€ </p></legend>
+                
+                {% for unfrais in  lesfraisforfait %}
+                    {% set idfrais = unfrais.idfrais %}
+                    {% set libelle = unfrais.libelle %}
+                    {% set quantite = unfrais.quantite %}
+                    <p>
+                        <label class="control-label text-center" for="idFrais">{{libelle}}</label>
+                        <input type="text" class="form-control text-center" id="idFrais" name="lesFrais[{{idfrais}}]" size="10" maxlength="5" value="{{quantite}}" >
+                    </p>
+                {%endfor%}
+            </fieldset>
+            <br>
+        </div>
+        <div class="piedForm">
+            <p>
+                <button type="reset" class="btn btn-default">Effacer</button>
+                <button type="submit"  id="ok" class="btn btn-primary">Valider</button>
+        </div>
+    </form>
+</div>
+
+

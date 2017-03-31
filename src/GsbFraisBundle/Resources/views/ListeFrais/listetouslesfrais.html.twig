@@ -1,0 +1,15 @@
+{% extends "GsbFraisBundle::accueil.html.twig" %}
+
+{% block mois %}
+        {% include 'GsbFraisBundle:ListeFrais:listemois.html.twig' with {'lesmois':lesmois,'lemois':lemois} %}
+{% endblock mois %}
+
+{% block fraisforfait %}
+{% include 'GsbFraisBundle:ListeFrais:listefraisforfait.html.twig' with {'lesfraisforfait':lesfraisforfait,'numannee':numannee,
+'nummois':nummois,'libetat':libetat,'montantvalide':montantvalide,'datemodif':datemodif} %}
+{% endblock fraisforfait %}
+
+{% block fraishorsforfait %}
+{% include 'GsbFraisBundle:ListeFrais:listefraishorsforfait.html.twig' with {'lesfraishorsforfait':lesfraishorsforfait,
+'nbjustificatifs':nbjustificatifs} %}
+{% endblock fraishorsforfait %}

@@ -1,0 +1,19 @@
+{# src/Resources/views/footer.html.twig #}
+{% block footer %}
+    <footer>
+    </br>
+    </hr>
+    <div class="text-right" id="copyright">
+        <p>&nbsp;&nbsp;© 2016-2020 Traoré & Manzola. Version 1.0.0</p>    
+    </div>
+    {% javascripts 
+    'bundles/gsbfrais/js/jquery.js'
+    'bundles/gsbfrais/js/bootstrap.js'
+    'bundles/gsbfrais/js/jquery.dataTables.min.js'
+    'bundles/gsbfrais/js/dataTables.bootstrap.min.js'
+    'bundles/gsbfrais/js/app.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %} 
+    </footer>
+{% endblock %}

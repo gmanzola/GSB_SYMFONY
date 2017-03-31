@@ -1,0 +1,43 @@
+gsb_frais_racine:
+    path:  /
+    defaults: { _controller: GsbFraisBundle:Home:index }
+    
+gsb_frais_home:
+    path:  /accueil
+    defaults: { _controller: GsbFraisBundle:Home:index }
+    
+gsb_frais_validerconnexion:
+    path:  /validerconnexion
+    defaults: { _controller: GsbFraisBundle:Home:validerconnexion } 
+    
+gsb_frais_deconnexion:
+    path: /deconnexion
+    defaults: { _controller: GsbFraisBundle:Home:deconnexion } 
+    
+gsb_frais_listefrais:
+    path: /listefrais
+    defaults: { _controller: GsbFraisBundle:ListeFrais:index }
+    
+gsb_frais_saisirfrais:
+    path: /saisirfrais
+    defaults: { _controller: GsbFraisBundle:SaisirFrais:index }
+    
+gsb_frais_validerfraishorsforfais:
+    path: /validerfraishorsforfait
+    defaults: { _controller: GsbFraisBundle:SaisirFrais:validerfraishorsforfait }
+    
+gsb_frais_supprimerfraishorsforfait:
+    path: /supprimerfraishorsforfait/{id}
+    defaults: { _controller: GsbFraisBundle:SaisirFrais:supprimerfraishorsforfait }   
+    
+gsb_frais_gererfrais:
+    path: /gererfrais
+    defaults: { _controller: GsbFraisBundle:GererFrais:index }
+    
+gsb_frais_gererfraisValidation:
+    path: /gererfrais/
+    defaults: { _controller: GsbFraisBundle:GererFrais:listefichefrais }
+    
+gsb_frais_gererfraisMajFraisForfait:
+    path: /gererfrais/maj
+    defaults: { _controller: GsbFraisBundle:GererFrais:majfrais }

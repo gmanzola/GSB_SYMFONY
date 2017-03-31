@@ -1,0 +1,106 @@
+{% set page_title = 'Tableau de Bord' %}
+{% set description = 'Intranet du Laboratoire GSB' %}
+<!DOCTYPE html>
+<html>
+    {# Chargement de la section HEAD #}
+    <head>
+        {{ include('GsbFraisBundle::layout.html.twig') }}
+    </head>
+    <body>
+        <div id="wrapper">
+
+            <!-- Navigation -->
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="{{ path('gsb_frais_home')}}">ACCUEIL</a>
+                </div>
+                <!-- Top Menu Items -->
+                <ul class="nav navbar-right top-nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i>
+                            {%if(app.session.get('nom') is defined )%}
+                                {{app.session.get('prenom')}} {{app.session.get('nom')}}
+                            {%endif%}
+                            <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#"><i class="fa fa-fw fa-user"></i> Profil</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-fw fa-gear"></i> Paramètres</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="{{path('gsb_frais_deconnexion')}}"><i class="fa fa-fw fa-power-off"></i> Déconnexion</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
+                <div class="collapse navbar-collapse navbar-ex1-collapse">
+                    <ul class="nav navbar-nav side-nav">
+                        {% if typecompte == 1 %}
+                            <li class="active">
+                                <a href="{{ path('gsb_frais_saisirfrais')}}"><i class="fa fa-fw fa-dashboard" aria-hidden="true"></i> Saisie fiche de frais</a>
+                            </li>
+                            <li class="active">
+                                <a href="{{ path('gsb_frais_listefrais')}}"><i class="fa fa-bar-chart" aria-hidden="true"></i> Mes fiches de frais</a>
+                            </li>
+                            <li>
+                                <a href="{{path('gsb_frais_deconnexion')}}"><i class="fa fa-fw fa-power-off" aria-hidden="true"></i>Déconnexion</a>
+                            </li>
+                        {% else %}
+                            <li class="active">
+                                <a href="{{ path('gsb_frais_gererfrais')}}"><i class="fa fa-check-square" aria-hidden="true"></i>&nbsp;&nbsp; Fiches de frais à valider</a>
+                            </li>
+                            <li class="active">
+                                <a href="{{ path('gsb_frais_gererfrais')}}"><i class="fa fa-credit-card" aria-hidden="true"></i>&nbsp;&nbsp; En attente de paiement</a>
+                            </li>
+                            <li>
+                                <a href="{{path('gsb_frais_deconnexion')}}"><i class="fa fa-fw fa-power-off" aria-hidden="true"></i> Déconnexion</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </nav>
+            <div id="page-wrapper">
+
+                <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <div class="row">
+                        {% block mois %}
+                        {% endblock mois %}
+                    </div>
+                    <!-- FRAIS FORFAIT  -->   
+                    <div class="row">
+
+                        {% block fraisforfait %}
+                        {% endblock fraisforfait %}
+                    </div>
+                    <br>
+                    </hr>
+                    <!-- SEPARATION -->
+                    <div class="row">
+                        {% block mois2 %}
+                        {% endblock mois2 %}
+                    </div>
+                    <!-- FRAIS HORS FORFAIT -->
+                    <div class="row">
+                        {% block fraishorsforfait %}
+                        {% endblock fraishorsforfait %}
+                    </div>
+                </div>                                                                    
+                <!-- /.container-fluid --> 
+                <footer class="footer">
+                    {{ include('GsbFraisBundle::footer.html.twig') }}
+                </footer>
+            </div>
+            <!-- /#page-wrapper -->
+
+        </div>
+        <!-- /#wrapper -->
+    </body> 
+
+</html>

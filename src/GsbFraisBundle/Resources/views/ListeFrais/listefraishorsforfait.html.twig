@@ -1,0 +1,66 @@
+{#% block fraishorsforfait %#}
+<div class="col-lg-12 col-md-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-lg-1">                                           
+                    <span class="fa fa-spinner fa-5x"></span> 
+                </div>
+                <div class="col-lg-11">
+                    <h3 class="text-left">
+                        Listes des frais hors forfait
+                    </h3>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <div class="panel-group">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" href="#FraisHF">Détails</a>
+                        </h4>
+                    </div>
+                    <div id="FraisHF" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <table id="TableFraisHF" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">
+                                <!--<table class="table table-bordered table-hover table-striped"> -->
+                                <h3>Descriptif des éléments hors forfait - {{nbjustificatifs}} justificatifs reçus -
+                                </h3>
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Etat</th>
+                                        <th>Libellé</th>
+                                        <th>Montant</th>
+                                    </tr>
+                                </thead>                                
+                                <tbody>                                                
+                                    {% for unFrais in  lesfraishorsforfait %}
+                                        {% set date = unFrais.date%}
+                                        {% set libelle = unFrais.libelle%}
+                                        {% set montant = unFrais.montant%}
+                                        <tr>
+                                            <td>{{date}}</td>
+                                            <td>{{unFrais.libelleetat}}</td>
+                                            {% if unFrais.etat == 'rf' %}
+                                                <td>« REFUSÉ » &nbsp;&nbsp;{{libelle}}</td>
+                                            {% else %}
+                                                <td>{{libelle}}</td>
+                                            {% endif %}
+                                            <td>{{montant}}</td>
+
+                                        </tr>
+                                    {% endfor %} 
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>   
+            </div> 
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+{#% endblock fraishorsforfait %#}

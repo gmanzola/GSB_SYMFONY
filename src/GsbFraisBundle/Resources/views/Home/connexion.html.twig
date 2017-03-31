@@ -1,0 +1,24 @@
+{% set page_title = 'Portail d\'accès' %}
+{% set description = 'Intranet du Laboratoire GSB' %}
+{% extends "::base.html.twig" %}
+{% block fos_user_content %}
+        {%if(messages is defined )%}
+            <div class ="erreur">
+                <ul>{{messages}}</ul></div>
+            {%endif%}
+        <form action="{{ path("gsb_frais_validerconnexion") }}" method="post" class="form-signin">
+            <input type="hidden" name="_csrf_token" />
+            <div class="login-container">
+                <h1>GSB Frais - Connexion</h1><br>
+                <form>
+                    <label for="username">Login</label>
+                    <input type="text" id="username" name="login" required="required" />
+                    <label for="password">Mot de passe</label>
+                    <input type="password" id="password" name="mdp" required="required" />
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                    <label for="remember_me">Se souvenir</label>
+                    <input type="submit" class="login login-submit" id="_submit" name="_submit" value="Valider" />
+                </form>
+            </div>
+        </form>
+    {% endblock fos_user_content %}

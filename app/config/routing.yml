@@ -1,0 +1,4 @@
+gsb_frais:
+    resource: "@GsbFraisBundle/Resources/config/routing.yml"
+    prefix:   /
+
