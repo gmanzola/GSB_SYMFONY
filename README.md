@@ -8,5 +8,5 @@ Gestion des frais des visiteurs médicaux en Symfony 3
 
 ## VOIR SERVICES.YML SRC/GsbFraisBundle
 
-## GMANZOLA.FR
-## CONTACT@GMANZOLA.FR
+GMANZOLA.FR
+CONTACT@GMANZOLA.FR
