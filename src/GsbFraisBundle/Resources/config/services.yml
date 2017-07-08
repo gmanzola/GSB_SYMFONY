@@ -1,11 +1,10 @@
 parameters:
     database_host: 127.0.0.1
     database_port: null
-    database_name: 'gmanzola'
+    database_name: 'gsbfrais'
     database_user: root
     database_password:
 services:
     gsb_frais.pdo:
         class: GsbFraisBundle\services\PdoGsb
         arguments: ['%database_host%','%database_name%','%database_user%','%database_password%']
-

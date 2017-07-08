@@ -18,6 +18,10 @@ gsb_frais_listefrais:
     path: /listefrais
     defaults: { _controller: GsbFraisBundle:ListeFrais:index }
     
+gsb_frais_listefraisPDF:
+    path: /listefrais/pdf
+    defaults: { _controller: GsbFraisBundle:ListeFrais:pdf }
+    
 gsb_frais_saisirfrais:
     path: /saisirfrais
     defaults: { _controller: GsbFraisBundle:SaisirFrais:index }
@@ -41,3 +45,19 @@ gsb_frais_gererfraisValidation:
 gsb_frais_gererfraisMajFraisForfait:
     path: /gererfrais/maj
     defaults: { _controller: GsbFraisBundle:GererFrais:majfrais }
+    
+gsb_frais_gererfraisMEP:
+    path: /gererfrais/mep
+    defaults: { _controller: GsbFraisBundle:GererFrais:paiementchoixMois }
+    
+gsb_frais_gererfraisMEP2:
+    path: /gererfrais/mep/
+    defaults: { _controller: GsbFraisBundle:GererFrais:paiementfichefrais }
+
+gsb_frais_gererfraisMisePaiementFiche:
+    path: /gererfrais/mep/paiement
+    defaults: { _controller: GsbFraisBundle:GererFrais:miseEnPaiementfichefrais }
+
+gsb_frais_gererfraisValiderFiche:
+    path: /gererfrais/validation
+    defaults: { _controller: GsbFraisBundle:GererFrais:Validationfichefrais }

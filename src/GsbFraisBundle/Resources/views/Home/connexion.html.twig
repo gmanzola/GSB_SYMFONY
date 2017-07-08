@@ -3,7 +3,7 @@
 {% extends "::base.html.twig" %}
 {% block fos_user_content %}
         {%if(messages is defined )%}
-            <div class ="erreur">
+            <div class ="erreur text-center">
                 <ul>{{messages}}</ul></div>
             {%endif%}
         <form action="{{ path("gsb_frais_validerconnexion") }}" method="post" class="form-signin">

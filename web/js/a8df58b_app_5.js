@@ -31,7 +31,7 @@ $(document).ready(function () {
             dataType: "json",
             type: "POST",
             data: {
-                'idFrais': $('#lesFrais').val(),
+                'idFrais': idfrais,
                 'etat': $('#choixEtat').val()
             },
             success: function (data) {
@@ -51,7 +51,24 @@ $(document).ready(function () {
             success: function (reponse) {
                 $('#lstVisiteur').empty();
                 $.each(reponse, function (index, element) {
-                    $('#lstVisiteur').append('<option value="' + element.id + '" selected="selected">' + element.id + ' ' + element.prenom + ' ' + element.nom + ' </option>');
+                    $('#lstVisiteur').append('<option value="'+ element.id +'" selected="selected">'+ element.prenom +' '+ element.nom +' </option>');
+                });
+            }
+        });
+    });
+    
+        $('#lstMoisPaiement').change(function () {
+        $.ajax({
+            url: "",
+            dataType: "json",
+            type: "POST",
+            data: {
+                'choixMois': $('#choixMois').val()
+            },
+            success: function (reponse) {
+                $('#lstVisiteur').empty();
+                $.each(reponse, function (index, element) {
+                    $('#lstVisiteur').append('<option value="'+ element.id +'" selected="selected">'+ element.prenom +' '+ element.nom +' </option>');
                 });
             }
         });

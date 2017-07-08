@@ -14,7 +14,7 @@
                     {% set quantite = unfrais.quantite %}
                     <p>
                         <label class="control-label text-center" for="idFrais">{{libelle}}</label>
-                        <input type="text" class="form-control text-center" id="idFrais" name="lesFrais[{{idfrais}}]" size="10" maxlength="5" value="{{quantite}}" >
+                        <input type="number" class="form-control text-center" id="idFrais" name="lesFrais[{{idfrais}}]" size="10" maxlength="5" value="{{quantite}}" >
                     </p>
                 {%endfor%}
             </fieldset>

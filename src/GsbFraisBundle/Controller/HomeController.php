@@ -36,14 +36,18 @@ class HomeController extends Controller {
 
         switch ($visiteur['typeCompte']) {
             case 1: {
-                    $response = $this->forward('GsbFraisBundle:ListeFrais:index');
-                    return $response;
-                    break;
+                    $route = 'gsb_frais_listefrais';
+                    return $this->redirect($this->generateUrl($route));
+                    // CHOIX DU REDIRECT CAR LE FORWARD NE CHANGE PAS L'URL ET L'AJAX NE FONCTIONNE PAS
+                    
+                    //$response = $this->forward('GsbFraisBundle:ListeFrais:index');
+                    //return $response;
                 }
             case 2: {
-                    $response = $this->forward('GsbFraisBundle:GererFrais:index');
-                    return $response;
-                    break;
+                    $route = 'gsb_frais_gererfrais';
+                    return $this->redirect($this->generateUrl($route));
+                    //$response = $this->forward('GsbFraisBundle:GererFrais:index');
+                    //return $response;
                 }
         }
     }

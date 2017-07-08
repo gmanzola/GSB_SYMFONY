@@ -1,0 +1,114 @@
+{% extends "GsbFraisBundle::accueil.html.twig" %}
+{% block fraisforfait %}
+    <div class="col-lg-12 col-md-12">
+        <h3 class="text-center">
+            Fiche de frais de {{ prenomvisiteur }} {{ nomvisiteur }} du mois : {{nummois}}-{{numannee}}
+        </h3>
+        <br>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-1">                                           
+                        <span class="fa fa-paperclip fa-5x"></span> 
+                    </div>
+                    <div class="col-lg-11">
+                        <h3 class="text-center">
+                            Fiche de frais
+                        </h3>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" href="#FraisForfait">Détails</a>
+                            </h4>
+                        </div>
+                        <div id="FraisForfait" class="">
+                            <div class="panel-body">
+                                <table id="TableFraisForfait" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">
+                                    <!--<table class="table table-bordered table-hover table-striped"> -->
+                                    <h3>Eléments forfaitisés d'un montant de : {{ montanttotal|round(1, 'floor') }} €</h3>
+                                    <h5> Etat : {{ libetat }} depuis le {{ datemodif }}
+                                        <br> Montant validé : {{ montantvalide|round(1, 'floor') }} €</h5>
+
+                                    <thead>
+
+                                        <tr>
+                                            {% for unfrais in lesfraisforfait %}
+
+                                                {% set libelle = unfrais.libelle %}
+                                                {% set quantite = unfrais.quantite %}
+                                                <th>
+                                                    {{libelle}}
+                                                </th> 
+                                            {% endfor %}
+                                        </tr>
+
+                                    </thead>                                
+                                    <tbody> 
+                                        {% for unfrais in lesfraisforfait %}
+                                            {% set idfrais = unfrais.idfrais %}
+                                            {% set quantite = unfrais.quantite %}
+                                        <td> {{quantite}} </td>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="panel-body">
+                                <table id="TableFraisHF" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">
+                                    <!--<table class="table table-bordered table-hover table-striped"> -->
+                                    <h3>Descriptif des éléments hors forfait - {{nbjustificatifs}} justificatifs reçus -
+                                    </h3>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Libellé</th>
+                                            <th>Montant</th>
+                                            <th>Justificatifs</th>
+                                        </tr>
+                                    </thead>                                
+                                    <tbody id="lesFraisHF">                                                
+                                        {% for unFrais in  lesfraishorsforfait %}
+                                            {% set idfrais = unFrais.id %}
+                                            {% set date = unFrais.date%}
+                                            {% set libelle = unFrais.libelle%}
+                                            {% set montant = unFrais.montant%}
+                                            {% set justificatif = unFrais.justificatif%}
+                                            <tr>
+                                                <td>{{date}}</td>
+                                                <td name="lesFrais[{{idfrais}}]">{{libelle}}</td>
+                                                <td>{{montant}}</td>
+                                                <td class="text-center">{{justificatif}}</td>
+                                            </tr>
+                                        {% endfor %} 
+                                    </tbody>
+                                </table>
+                                <div class="text-center">
+                                    <a href="{{path('gsb_frais_gererfraisMisePaiementFiche')}}" 
+                                       onclick="return confirm('Voulez-vous vraiment mettre en paiement cette fiche ?');">Mettre en Paiement</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                </div> 
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+{% endblock fraisforfait %}
+
+
+
+
+
+
+
+
+
+
+
+

@@ -72,21 +72,23 @@ class PdoGsb {
      * @return tous les champs des lignes de frais hors forfait sous la forme d'un tableau associatif 
      */
     public function getLesFraisHorsForfait($idVisiteur, $mois) {
-        
+
         $req = "select
 	lhf.id, lhf.idvisiteur,
     lhf.mois, lhf.libelle,
     lhf.date, lhf.montant,
+    lhf.justificatif,
     lhf.etat,  e.libelle as libelleetat 
+    
 from 
 	lignefraishorsforfait lhf, etat e 
     where
 	lhf.etat = e.id
 	and lhf.idvisiteur = :idVisiteur
 	and lhf.mois = :mois";
-        
+
         //$req = "select * from lignefraishorsforfait where lignefraishorsforfait.idvisiteur = :idVisiteur 
-	//	and lignefraishorsforfait.mois = :mois ";
+        //	and lignefraishorsforfait.mois = :mois ";
         $stmt = PdoGsb::$monPdo->prepare($req);
         $stmt->bindParam(':idVisiteur', $idVisiteur);
         $stmt->bindParam(':mois', $mois);
@@ -97,6 +99,14 @@ from
             $date = $lesLignes[$i]['date'];
             $lesLignes[$i]['date'] = dateAnglaisVersFrancais($date);
         }
+        return $lesLignes;
+    }
+
+    public function getLesEtatFrais() {
+        $req = "SELECT * FROM `etat` where id IN ('at','rf','rp','va')";
+        $stmt = PdoGsb::$monPdo->prepare($req);
+        $stmt->execute();
+        $lesLignes = $stmt->fetchAll();
         return $lesLignes;
     }
 
@@ -224,7 +234,7 @@ from
      * @return le mois sous la forme aaaamm
      */
     public function dernierMoisSaisi($idVisiteur) {
-        $req = "select max(mois) as dernierMois from fichefrais where fichefrais.idvisiteur = :idVisiteur";
+        $req = "select max(mois) as derniermois from fichefrais where fichefrais.idvisiteur = :idVisiteur";
         $stmt = PdoGsb::$monPdo->prepare($req);
         $stmt->bindParam(':idVisiteur', $idVisiteur);
         $stmt->execute();
@@ -463,6 +473,22 @@ from
     }
 
     /**
+     * 
+     * @param type $idvisteur
+     * @param type $choixMois
+     */
+    public function getMontantForfaitKilometrique($idvisteur, $choixMois) {
+        $req = "select SUM(tv.montant * lff.quantite) as indeminiteKilometrique from lignefraisforfait lff, typevehicule tv, vehiculevisiteur vv where
+                lff.idfraisforfait = vv.idKm
+                and tv.id = vv.idvehicule
+                and lff.idvisiteur = vv.idvisiteur
+                and lff.idvisiteur ='$idVisiteur' and mois ='$choixMois'";
+        $res = PdoGsb::$monPdo->query($req);
+        $montantIndeminiteKilometrique = $res->fetch();
+        return $montantIndeminiteKilometrique;
+    }
+
+    /**
      * Retourne les mois pour lesquel des fiches de frais sont à valider 
      * @param Aucun
      * @return un tableau associatif de clé un mois -aaaamm- et de valeurs l'année et le mois correspondant
@@ -484,7 +510,6 @@ from
             $laLigne = $res->fetch();
         }
         return $lesMois;
-
     }
 
     /**
@@ -605,14 +630,12 @@ from
     /**
      * fonction qui valide un frais (ce frais change d'état)
      * @param $id du frais hors forfait
-    public function validerFraisHorsForfait($id) {
-        $req = "update lignefraishorsforfait set etat ='va' where id = '$id'";
-        //echo $req;
-        PdoGsb::$monPdo->exec($req);
-    }
+      public function validerFraisHorsForfait($id) {
+      $req = "update lignefraishorsforfait set etat ='va' where id = '$id'";
+      //echo $req;
+      PdoGsb::$monPdo->exec($req);
+      }
      */
-
-    
     /*
      * Valide la fiche de frais et met a jour le montant de la fiche de frais
      * @param $idVisiteur, $choixMois de la fiche de frais
@@ -641,7 +664,7 @@ from
     public function verifEtatFraisHF($idVisiteur, $choixMois) {
 
         $ok = false;
-        $req = "select count(*) as nblignesfraisHF from lignefraishorsforfait where idvisiteur ='$idVisiteur' and etat = 'at' or etat = 'rp' and mois='$choixMois' ";
+        $req = "select count(*) as nblignesfraisHF from lignefraishorsforfait where idvisiteur ='$idVisiteur' and etat NOT IN('va','rf') and mois='$choixMois' ";
         $res = PdoGsb::$monPdo->query($req);
         $laLigne = $res->fetch();
         if ($laLigne['nblignesfraisHF'] == 0) {
@@ -659,11 +682,63 @@ from
         $res = PdoGsb::$monPdo->query($req);
         $montantHF = $res->fetch();
 
+
+        $req = "select SUM(tv.montant * lff.quantite) as indeminiteKilometrique from lignefraisforfait lff, typevehicule tv, vehiculevisiteur vv where
+                lff.idfraisforfait = vv.idKm
+                and tv.id = vv.idvehicule
+                and lff.idvisiteur = vv.idvisiteur
+                and lff.idvisiteur ='$idVisiteur' and mois ='$choixMois'";
+        $res = PdoGsb::$monPdo->query($req);
+        $montantIndeminiteKilometrique = $res->fetch();
+
         $req = "select SUM(montant * quantite) as montantFraisForfait from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where idvisiteur = '$idVisiteur' and mois ='$choixMois'";
         $res = PdoGsb::$monPdo->query($req);
         $montantForfait = $res->fetch();
 
-        $montantTotal = $montantHF['montantTotalFraisHF'] + $montantForfait['montantFraisForfait'];
+        $montantTotal = $montantHF['montantTotalFraisHF'] + $montantForfait['montantFraisForfait'] + $montantIndeminiteKilometrique['indeminiteKilometrique'];
+        return $montantTotal;
+    }
+
+    /**
+     * fonction Calcul le montant total des frais hors forfait validé
+     * @param $idVisiteur, $mois
+     */
+    public function getTotalHFValide($idVisiteur, $choixMois) {
+        $req = "select sum(montant) as montantTotalFraisHF from lignefraishorsforfait where idvisiteur='$idVisiteur' and mois='$choixMois' and etat='va'";
+        $res = PdoGsb::$monPdo->query($req);
+        $montantHF = $res->fetch();
+        return $montantHF;
+    }
+
+    /**
+     * fonction Calcul le montant total des frais hors forfait refusé
+     * @param $idVisiteur, $mois
+     */
+    public function getTotalHFRefuse($idVisiteur, $choixMois) {
+        $req = "select sum(montant) as montantTotalFraisRF from lignefraishorsforfait where idvisiteur='$idVisiteur' and mois='$choixMois' and etat='rf'";
+        $res = PdoGsb::$monPdo->query($req);
+        $montantRF = $res->fetch();
+        return $montantRF;
+    }
+
+    /**
+     * fonction Calcul le montant total des frais forfaitisés
+     * @param $idVisiteur, $mois
+     */
+    public function getTotalForfait($idVisiteur, $choixMois) {
+        $req1 = "select SUM(tv.montant * lff.quantite) as indeminiteKilometrique from lignefraisforfait lff, typevehicule tv, vehiculevisiteur vv where
+                lff.idfraisforfait = vv.idKm
+                and tv.id = vv.idvehicule
+                and lff.idvisiteur = vv.idvisiteur
+                and lff.idvisiteur ='$idVisiteur' and mois ='$choixMois'";
+        $res1 = PdoGsb::$monPdo->query($req1);
+        $montantIndeminiteKilometrique = $res1->fetch();
+
+        $req = "select SUM(montant * quantite) as montantFraisForfait from fraisforfait inner join lignefraisforfait on fraisforfait.id = lignefraisforfait.idfraisforfait where idvisiteur = '$idVisiteur' and mois ='$choixMois'";
+        $res = PdoGsb::$monPdo->query($req);
+        $montantForfait = $res->fetch();
+
+        $montantTotal = $montantForfait['montantFraisForfait'] + $montantIndeminiteKilometrique['indeminiteKilometrique'];
         return $montantTotal;
     }
 

@@ -18,13 +18,13 @@ class SaisirFraisController extends Controller {
         $typeCompte = $session->get('typecompte');
 
         if (estConnecte($request, $session) || $typeCompte == 1) {
-             
-           //$choixPuissance = $session->get('choixPuissance');
+            
+            $pdo = $this->get('gsb_frais.pdo');
             $idVisiteur = $session->get('id');
             $mois = getMois(date("d/m/Y"));
             $numAnnee = substr($mois, 0, 4);
             $numMois = substr($mois, 4, 2);
-            
+
             if ($pdo->estPremierFraisMois($idVisiteur, $mois)) {
                 $pdo->creeNouvellesLignesFrais($idVisiteur, $mois);
             }
@@ -54,7 +54,7 @@ class SaisirFraisController extends Controller {
         $session = $request->getSession();
         $typeCompte = $session->get('typecompte');
         if (estConnecte($request, $session) || $typeCompte == 1) {
-            
+
             $pdo = $this->get('gsb_frais.pdo');
             $idVisiteur = $session->get('id');
             $mois = getMois(date("d/m/Y"));

@@ -63,4 +63,10 @@
         </div>
     </div>
 </div>
+{% if etatfiche == 'va' or etatfiche == 'mp' %}
+    <div class="text-center">
+        <a href="{{path('gsb_frais_listefraisPDF')}}" target="_blank">
+           TÉLÉCHARGER PDF</a>
+    </div>
+{% endif %}
 {#% endblock fraishorsforfait %#}

@@ -3,6 +3,7 @@
     <div class="col-lg-12 col-md-12">
         <h3 class="text-center">
             Fiche de frais de {{ prenomvisiteur }} {{ nomvisiteur }} du mois : {{nummois}}-{{numannee}}
+            <h4 class="text-center">Possède un(e) {{ typevehicule }} - {{ puissancevehicule }} TARIF {{ montantKm }}€ </h4>
         </h3>
         <br>
         <div class="panel panel-primary">
@@ -12,8 +13,8 @@
                         <span class="fa fa-paperclip fa-5x"></span> 
                     </div>
                     <div class="col-lg-11">
-                        <h3 class="text-left">
-                            Frais Forfait
+                        <h3 class="text-center">
+                            FICHE DE FRAIS
                         </h3>
                     </div>
                     <div class="clearfix"></div>
@@ -22,19 +23,16 @@
             <div class="panel-footer">
                 <div class="panel-group">
                     <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#FraisForfait">Détails</a>
-                            </h4>
-                        </div>
-                        <div id="FraisForfait" class="panel-collapse collapse">
+                        <div id="FraisForfait">
                             <div class="panel-body">
                                 <table id="TableFraisForfait" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">
                                     <!--<table class="table table-bordered table-hover table-striped"> -->
                                     <form action="{{path('gsb_frais_gererfraisMajFraisForfait')}}" method="POST">
-                                        <h3>Eléments forfaitisés d'un montant de : {{ montanttotal }} €</h3>
+                                        <h3 class="text-center">Fiche de frais d'un montant de : {{ montanttotal|round(1, 'floor') }} €</h3>
+                                        <br>
+                                        <h4>Total des frais forfait : {{ totalForfait|round(1, 'floor') }} €</h4>
                                         <h5> Etat : {{ libetat }} depuis le {{ datemodif }}
-                                            <br> Montant validé : {{ montantvalide }} €</h5>
+                                        </h5>
 
                                         <thead>
 
@@ -56,7 +54,7 @@
                                             {% for unfrais in lesfraisforfait %}
                                                 {% set idfrais = unfrais.idfrais %}
                                                 {% set quantite = unfrais.quantite %}
-                                            <td><input type="text" class="form-control text-center" id="idFrais" name="lesFrais[{{idfrais}}]" size="10" maxlength="5" value="{{quantite}}" ></td>
+                                            <td><input type="number" class="form-control text-center" id="idFrais" name="lesFrais[{{idfrais}}]" size="10" maxlength="5" value="{{quantite}}" ></td>
                                             {% endfor %}
                                         <td class="text-center"><button type="submit"  id="ok" class="btn btn-primary">Modifier</button></td>
                                         </tbody>
@@ -64,44 +62,27 @@
                                 </table>
                             </div>
                         </div>
-                    </div>   
-                </div> 
-                <div class="clearfix"></div>
-            </div>
-        </div>
-    </div>
-{% endblock fraisforfait %}
-
-{% block fraishorsforfait %}
-    <div class="col-lg-12 col-md-12">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-lg-1">                                           
-                        <span class="fa fa-paperclip fa-5x"></span> 
-                    </div>
-                    <div class="col-lg-11">
-                        <h3 class="text-left">
-                            Frais Hors forfait
-                        </h3>
-                    </div>
-                    <div class="clearfix"></div>
-                </div>
-            </div>
-            <div class="panel-footer">
-                <div class="panel-group">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" href="#FraisHF">Détails</a>
-                            </h4>
-                        </div>
-                        <div id="FraisHF" class="panel-collapse collapse text-center">
+                        <div id="FraisHF" class="text-center">
                             <div class="panel-body">
                                 <table id="TableFraisHF" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">
                                     <!--<table class="table table-bordered table-hover table-striped"> -->
+                                    {# On affiche tous les messages flash dont le nom est « info » #}
+                                    {% for message in app.session.flashbag.get('info') %}
+                                        <div class="text-center warning">
+                                            {{ message }}
+                                        </div>
+                                    {% endfor %}
                                     <h3>Descriptif des éléments hors forfait - {{nbjustificatifs}} justificatifs reçus -
                                     </h3>
+                                    <br>
+                                    <h4>
+                                        Total des frais hors forfait validé : {{totalHFva.montantTotalFraisHF}} €
+                                    </h4>
+                                    
+                                    <h4>
+                                        Total des frais hors forfait refusé : {{totalHFrf.montantTotalFraisRF}} €
+                                    </h4>
+                                    
                                     <thead>
                                         <tr>
                                             <th>Date</th>
@@ -118,31 +99,42 @@
                                             {% set montant = unFrais.montant%}
                                             <tr>
                                                 <td>{{date}}</td>
-                                                <td name="lesFrais[{{idfrais}}]"> {{ unFrais.etat }}&nbsp;&nbsp;{{libelle}}</td>
+                                                <td id="idfrais" name="{{idfrais}}">{{libelle}}</td>
+                                        <script type="text/javascript">
+
+                                            var idfrais = {{ idfrais }};
+                                        </script>
                                         <td>{{montant}}</td>
                                         <td>
-                                            <select class="form-control" id="choixEtat" name="choixEtat">
-
-                                                <option value="at">En Attente</option>
-                                                <option value="rf">Refusé</option>
-                                                <option value="rp">Reporté</option>
-                                                <option value="va">Validé</option>
+                                            <select class="form-control center-block" id="choixEtat" name="choixEtat">
+                                                {% for unEtat in  lesetats %}
+                                                    {% if unFrais.etat == unEtat.id %}
+                                                        <option selected value="{{unEtat.id}}">{{unEtat.libelle}}</option>
+                                                    {% else %}
+                                                        <option value="{{unEtat.id}}">{{unEtat.libelle}}</option>
+                                                    {% endif %}
+                                                {% endfor %}
                                             </select>
                                         </td>
                                         </tr>
                                     {% endfor %} 
                                     </tbody>
-                                </table>
-                                <a href="index.php?uc=suiviFrais&action=mettreEnPaiement&id=<?php echo $id;?>" 
-                                   onclick="return confirm('Voulez-vous vraiment mettre en paiement cette fiche ?');">Mettre en Paiement</a>
+                                </table>                      
                             </div>
-                        </div>
+                        </div>            
                     </div>   
                 </div> 
                 <div class="clearfix"></div>
             </div>
         </div>
     </div>
+{% endblock fraisforfait %}
+
+{% block fraishorsforfait %}
+ <div class="text-center">
+            <a href="{{path('gsb_frais_gererfraisValiderFiche')}}" 
+               onclick="return confirm('Voulez-vous vraiment valider cette fiche ?');">Valider la fiche de frais</a>
+        </div>
 {% endblock fraishorsforfait %}
 
 

@@ -27,9 +27,9 @@
                             <table id="TableFraisForfait" class="table table-striped table-bordered table-hover" width="100%" cellspacing="0">
                                 <!--<table class="table table-bordered table-hover table-striped"> -->
 
-                                <h3>Eléments forfaitisés d'un montant de : {{ montanttotal }} €</h3>
+                                <h3>Eléments forfaitisés d'un montant de : {{ montanttotal|round(1, 'floor') }} €</h3>
                                 <h5> Etat : {{ libetat }} depuis le {{ datemodif }}
-                                    <br> Montant validé : {{ montantvalide }} €</h5>
+                                    <br> Montant validé : {{ montantvalide|round(1, 'floor') }} €</h5>
 
                                 <thead>
 
